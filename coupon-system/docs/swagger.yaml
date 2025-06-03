@@ -1,0 +1,84 @@
+openapi: 3.0.0
+info:
+  title: Coupon System API
+  description: API for managing coupons in a medicine ordering platform.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+paths:
+  /coupons/applicable:
+    get:
+      summary: Get applicable coupons
+      responses:
+        '200':
+          description: A list of applicable coupons
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  applicable_coupons:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        coupon_code:
+                          type: string
+                        discount_value:
+                          type: number
+  /coupons/validate:
+    post:
+      summary: Validate a coupon
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                coupon_code:
+                  type: string
+                cart_items:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      category:
+                        type: string
+                order_total:
+                  type: number
+                timestamp:
+                  type: string
+                  format: date-time
+      responses:
+        '200':
+          description: Coupon validation result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  is_valid:
+                    type: boolean
+                  discount:
+                    type: object
+                    properties:
+                      items_discount:
+                        type: number
+                      charges_discount:
+                        type: number
+                  message:
+                    type: string
+        '400':
+          description: Invalid coupon or request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  is_valid:
+                    type: boolean
+                  reason:
+                    type: string
