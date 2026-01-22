@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"coupon-system/internal/api/handlers"
 	"coupon-system/internal/config"
 	"coupon-system/internal/repository"
@@ -59,7 +58,4 @@ func main() {
 	if err := server.ListenAndServe(); err != nil {
 		log.Fatalf("Server failed to start: %v", err)
 	}
-
-	// Graceful shutdown would go here in production
-	_ = context.Background()
 }
