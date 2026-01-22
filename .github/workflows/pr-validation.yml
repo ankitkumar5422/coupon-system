@@ -40,7 +40,7 @@ jobs:
         ! grep -r "TODO\|FIXME" --include="*.go" . || echo "Found TODO/FIXME comments (informational only)"
         
         echo "Checking for debug statements..."
-        ! grep -r "fmt.Print[^f]" --include="*.go" --exclude="main.go" ./internal ./pkg || echo "Found debug statements (informational only)"
+        ! grep -r "fmt.Print[^f]" --include="*.go" --exclude-dir=cmd ./internal ./pkg || echo "Found debug statements (informational only)"
 
   size-check:
     runs-on: ubuntu-latest
