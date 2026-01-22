@@ -1,0 +1,57 @@
+name: PR Validation
+
+on:
+  pull_request:
+    branches: [ "main", "develop" ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.20'
+    
+    - name: Install dependencies
+      working-directory: ./coupon-system
+      run: go mod download
+    
+    - name: Run quick checks
+      working-directory: ./coupon-system
+      run: |
+        echo "Running go fmt..."
+        test -z "$(gofmt -l .)"
+        
+        echo "Running go vet..."
+        go vet ./...
+        
+        echo "Building application..."
+        go build -v ./cmd/server/main.go
+    
+    - name: Check for common issues
+      working-directory: ./coupon-system
+      run: |
+        echo "Checking for TODO/FIXME comments..."
+        ! grep -r "TODO\|FIXME" --include="*.go" . || echo "Found TODO/FIXME comments (informational only)"
+        
+        echo "Checking for debug statements..."
+        ! grep -r "fmt.Print[^f]" --include="*.go" --exclude-dir=cmd ./internal ./pkg || echo "Found debug statements (informational only)"
+
+  size-check:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Check code size
+      run: |
+        echo "Repository statistics:"
+        echo "Total Go files: $(find ./coupon-system -name '*.go' | wc -l)"
+        echo "Total lines of Go code: $(find ./coupon-system -name '*.go' -exec cat {} \; | wc -l)"
+        echo "Repository size: $(du -sh ./coupon-system)"
