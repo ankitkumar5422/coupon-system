@@ -4,6 +4,7 @@ import (
 	"coupon-system/internal/models"
 	"coupon-system/internal/service"
 	"encoding/json"
+	"log"
 	"net/http"
 	"strconv"
 	"time"
@@ -26,7 +27,9 @@ func CreateCoupon(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(coupon)
+	if err := json.NewEncoder(w).Encode(coupon); err != nil {
+		log.Printf("error encoding response: %v", err)
+	}
 }
 
 // GetApplicableCoupons retrieves applicable coupons based on cart items, order total, and timestamp
@@ -115,7 +118,9 @@ func GetApplicableCoupons(w http.ResponseWriter, r *http.Request) {
 
 	resp := ApplicableCouponsResponse{ApplicableCoupons: applicable}
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(resp)
+	if err := json.NewEncoder(w).Encode(resp); err != nil {
+		log.Printf("error encoding response: %v", err)
+	}
 }
 
 // ValidateCoupon validates a coupon for a given cart and order
@@ -154,7 +159,9 @@ func ValidateCoupon(w http.ResponseWriter, r *http.Request) {
 		resp.Discount = discount
 		resp.Message = "coupon applied successfully"
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(resp)
+		if err := json.NewEncoder(w).Encode(resp); err != nil {
+			log.Printf("error encoding response: %v", err)
+		}
 		return
 	}
 
@@ -164,5 +171,7 @@ func ValidateCoupon(w http.ResponseWriter, r *http.Request) {
 		resp.Reason = err.Error()
 	}
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(resp)
+	if err := json.NewEncoder(w).Encode(resp); err != nil {
+		log.Printf("error encoding response: %v", err)
+	}
 }
