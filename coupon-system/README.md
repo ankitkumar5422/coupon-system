@@ -147,6 +147,33 @@ coupon-system
 - Caching is implemented for performance.
 - The codebase is modular and ready for extension (e.g., Postgres support, advanced auth, etc.).
 
+## Continuous Integration
+
+This project includes comprehensive GitHub Actions workflows for:
+
+- **Go CI**: Automated building, testing, and linting across multiple Go versions
+- **Docker Build**: Automated Docker image building and publishing to GitHub Container Registry
+- **Security Scanning**: Regular security and vulnerability checks using Gosec, CodeQL, and govulncheck
+- **PR Validation**: Quick validation checks for pull requests
+
+For more details, see [GitHub Actions Workflows Documentation](../.github/workflows/README.md).
+
+### Build Status
+
+All CI workflows run automatically on pushes and pull requests to ensure code quality and security.
+
+## Testing
+
+Run tests with:
+```sh
+go test -v ./...
+```
+
+Run tests with coverage:
+```sh
+go test -v -cover ./...
+```
+
 ## Optional
 
 - Deployed API URL can be provided upon request.
