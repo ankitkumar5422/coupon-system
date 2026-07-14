@@ -40,7 +40,9 @@ func main() {
 	// Health check endpoint
 	router.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("OK"))
+		if _, err := w.Write([]byte("OK")); err != nil {
+			log.Printf("error writing response: %v", err)
+		}
 	}).Methods(http.MethodGet)
 
 	// Start server
